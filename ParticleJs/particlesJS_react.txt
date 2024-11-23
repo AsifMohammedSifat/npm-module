@@ -1,3 +1,6 @@
+Note: https://github.com/VincentGarreau/particles.js/blob/master/particles.min.js
+particle.min.js must be in public/js/particles.min.js folder
+
 Main.jsx:
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -37,7 +40,7 @@ const ParticlesBackground = () => {
   useEffect(() => {
     // Dynamically load particles.js script
     const script = document.createElement("script");
-    script.src = "http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js";
+    script.src = "/js/particles.min.js";
     script.async = true;
     document.body.appendChild(script);
 
