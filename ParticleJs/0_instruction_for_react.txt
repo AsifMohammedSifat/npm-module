@@ -1,0 +1,165 @@
+
+Mian doc: https://github.com/tsparticles/react
+1) Visit Site:
+-> https://www.npmjs.com/package/@tsparticles/react -> https://particles.js.org/ -> https://particles.js.org/samples/index.html -->[ convert json to js]: https://www.convertsimple.com/convert-json-to-javascript/
+
+2) Main.jsx:
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.jsx";
+import { BrowserRouter as Router } from "react-router-dom";
+import AuthProvider from "./provider/AuthProvider.jsx";
+import LoadingErrorProvider from "./provider/LoadingErrorProvider.jsx";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import ParticlesBackground from "./common/ParticleJs/ParticlesBackground.jsx";
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <div style={{ position: "relative", minHeight: "100vh", overflow: "hidden" }}>
+      <ParticlesBackground />
+      
+      <LoadingErrorProvider>
+        <AuthProvider>
+          <Router>
+            {/* App content with higher z-index */}
+            <div style={{ position: "relative", zIndex: 1 }}>
+              <App />
+            </div>
+          </Router>
+        </AuthProvider>
+        <ToastContainer position="bottom-right" autoClose={3000} theme="dark" />
+      </LoadingErrorProvider>
+    </div>
+  </StrictMode>
+);
+
+===================== ParticlesBackground ===========================================
+import { useEffect, useMemo, useState } from "react";
+import Particles, { initParticlesEngine } from "@tsparticles/react"; 
+import { loadSlim } from "@tsparticles/slim";  // Load the slim package for lighter particles
+
+const ParticlesBackground = () => {
+  const [init, setInit] = useState(false);
+
+  // Effect hook to initialize particles engine only once when the app starts
+  useEffect(() => {
+    initParticlesEngine(async (engine) => {
+      // Initialize the particles engine and load the slim version of the particles package
+      await loadSlim(engine);
+    }).then(() => {
+      setInit(true);  // Update state to indicate that the particles engine is initialized
+    });
+  }, []);
+
+  // Callback function that will be called once particles are loaded
+  const particlesLoaded = (container) => {
+    console.log(container);  // Log the container (can be useful for debugging)
+  };
+
+  // Memoize the particles options to optimize performance
+  const options = useMemo(
+    () => (
+      {
+      background: {
+        color: {
+          value: "#f5f3ff",  // Set the background color to a shade of blue
+        },
+      },
+      fpsLimit: 120,  // Limit the FPS to 120 to avoid performance issues
+      interactivity: {
+        events: {
+          onClick: {
+            enable: true,
+            mode: "push",  // Push particles when clicked
+          },
+          onHover: {
+            enable: true,
+            mode: "repulse",  // Repulse particles on hover
+          },
+        },
+        modes: {
+          push: {
+            quantity: 4,  // Push 4 particles on click
+          },
+          repulse: {
+            distance: 200,  // Repulse effect distance
+            duration: 0.4,  // Duration of the repulse effect
+          },
+        },
+      },
+      particles: {
+        color: {
+          value: "#000000",  // Particle color set to white
+        },
+        links: {
+          color: "#000000",  // Link color between particles
+          distance: 150,  // Max distance for links
+          enable: true,  // Enable linking particles
+          opacity: 0.5,  // Opacity of the links
+          width: 1,  // Width of the links
+        },
+        move: {
+          direction: "none",  // Particles will move randomly
+          enable: true,  // Enable particle movement
+          outModes: {
+            default: "bounce",  // Particles will bounce back when they hit the boundary
+          },
+          random: false,  // No random movement
+          speed: 2,  // Speed of particles
+          straight: false,  // Particles won't move in a straight line
+        },
+        number: {
+          density: {
+            enable: true,  // Enable particle density
+          },
+          value: 150,  // Number of particles
+        },
+        opacity: {
+          value: 0.5,  // Particle opacity
+        },
+        shape: {
+          type: "circle",  // Shape of particles
+        },
+        size: {
+          value: { min: 1, max: 5 },  // Size range of particles
+        },
+      },
+      detectRetina: true,  // Enable retina display support
+    }),
+    [],  // Empty dependency array means this configuration won't change
+  );
+  
+
+  // Render the particles once initialized
+  if (init) {
+    return (
+      <Particles
+        id="tsparticles"  // Unique ID for the particles container
+        particlesLoaded={particlesLoaded}  // Callback when particles are loaded
+        options={options}  // Pass the configuration options
+      />
+    );
+  }
+
+  // If particles are not yet initialized, return null (no UI rendering)
+  return <></>;
+};
+
+export default ParticlesBackground;
+
+
+========================================= css in index.css ====================
+
+/* Example CSS for particles container */
+#tsparticles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  top: 0;
+  left: 0;
+}
+
+
+
