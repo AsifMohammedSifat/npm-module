@@ -1,3 +1,6 @@
+Particle Resource Link: 
+1) https://vincentgarreau.com/particles.js/
+2) https://confetti.js.org/
 Note: https://github.com/VincentGarreau/particles.js/blob/master/particles.min.js
 particle.min.js must be in public/js/particles.min.js folder
 
