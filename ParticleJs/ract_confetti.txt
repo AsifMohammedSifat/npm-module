@@ -1,0 +1,16 @@
+1) https://www.npmjs.com/package/react-confetti
+2) https://alampros.github.io/react-confetti/?path=/story/props-default--default
+3) Component:
+
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
+
+const ResultParticle = () => {
+  const { width, height } = useWindowSize();
+  return <Confetti width={width} height={height} />;
+};
+
+export default ResultParticle;
+
+
+4) Call the component from anywhere
